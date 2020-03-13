@@ -1,10 +1,14 @@
 package com.example.recyclerviewexample;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button buttonInsert;
     private Button buttonRemove;
-    private EditText editTextInsert;
+    private EditText rem_Position,Add_contact,Add_Number;
     private EditText editTextRemove;
 
     @Override
@@ -34,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         setButtons();
     }
 
-    public void insertItem(int position) {
-        mExampleList.add(position, new ExampleItem(R.drawable.ic_user, "New Item At Position" + position, "This is Line 2"));
+    public void insertItem(int position,String add_contact,String add_number) {
+        mExampleList.add(position, new ExampleItem(R.drawable.ic_user, add_contact, "+91"+add_number));
         mAdapter.notifyItemInserted(position);
     }
 
@@ -51,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void createExampleList() {
         mExampleList = new ArrayList<>();
-        mExampleList.add(new ExampleItem(R.drawable.ic_man, "Line 1", "Line 2"));
-        mExampleList.add(new ExampleItem(R.drawable.ic_user, "Line 3", "Line 4"));
-        mExampleList.add(new ExampleItem(R.drawable.ic_woman, "Line 5", "Line 6"));
+        mExampleList.add(new ExampleItem(R.drawable.ic_man, "Manish", "+919039250820"));
+        mExampleList.add(new ExampleItem(R.drawable.ic_user, "shiva", "+917587100227"));
+        mExampleList.add(new ExampleItem(R.drawable.ic_woman, "papa", "+919425557395"));
     }
 
     public void buildRecyclerView() {
@@ -81,14 +85,66 @@ public class MainActivity extends AppCompatActivity {
     public void setButtons() {
         buttonInsert = findViewById(R.id.button_insert);
         buttonRemove = findViewById(R.id.button_remove);
-        editTextInsert = findViewById(R.id.edittext_insert);
         editTextRemove = findViewById(R.id.edittext_remove);
 
         buttonInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = Integer.parseInt(editTextInsert.getText().toString());
-                insertItem(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                // Get the layout inflater
+                Context context=getApplicationContext();
+
+                LayoutInflater inflater =getLayoutInflater();
+                View view=inflater.inflate(R.layout.dialogbox_activity,null);
+
+                rem_Position=(EditText)view.findViewById(R.id.Position);
+                Add_contact=(EditText)view.findViewById(R.id.Add_Cname);
+                Add_Number=(EditText)view.findViewById(R.id.Add_Pnum);
+
+                builder.setTitle("Add Contact");
+
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                builder.setView(view)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which)
+                                    {
+                                        String add_contact=Add_contact.getText().toString();
+                                        String add_number=Add_Number.getText().toString();
+                                        int pos=Integer.parseInt(rem_Position.getText().toString());
+                                        insertItem(pos,add_contact,add_number);
+                                    }
+                                });
+
+                // Set the Negative button with No name
+                // OnClickListener method is use
+                // of DialogInterface interface.
+                builder
+                        .setNegativeButton(
+                                "Cancel",
+                                new DialogInterface
+                                        .OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which)
+                                    {
+
+                                        // If user click no
+                                        // then dialog box is canceled.
+                                        dialog.cancel();
+                                    }
+                                });
+
+                // Create the Alert dialog
+                AlertDialog alertDialog = builder.create();
+
+                // Show the Alert Dialog box
+                alertDialog.show();
+
             }
         });
 

@@ -78,9 +78,9 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
         ExampleItem currentItem = mExampleList.get(position);
 
-        holder.mImageView.setImageResource(currentItem.getImageResource());
-        holder.mTextView1.setText(currentItem.getText1());
-        holder.mTextView2.setText(currentItem.getText2());
+        holder.mImageView.setImageResource(currentItem.getmImageResource());
+        holder.mTextView1.setText(currentItem.getmContactName());
+        holder.mTextView2.setText(currentItem.getmPhone());
     }
 
     @Override
